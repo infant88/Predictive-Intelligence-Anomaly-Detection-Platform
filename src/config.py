@@ -2,11 +2,18 @@ import os
 from pathlib import Path
 from pydantic import BaseModel
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "data"
-ARTIFACTS_DIR = BASE_DIR / "artifacts"
-MLRUNS_DIR = BASE_DIR / "mlruns"
-LOGS_DIR = BASE_DIR / "logs"
+IS_VERCEL = bool(os.environ.get("VERCEL"))
+
+if IS_VERCEL:
+    DATA_DIR = Path("/tmp/data")
+    ARTIFACTS_DIR = Path("/tmp/artifacts")
+    MLRUNS_DIR = Path("/tmp/mlruns")
+    LOGS_DIR = Path("/tmp/logs")
+else:
+    DATA_DIR = BASE_DIR / "data"
+    ARTIFACTS_DIR = BASE_DIR / "artifacts"
+    MLRUNS_DIR = BASE_DIR / "mlruns"
+    LOGS_DIR = BASE_DIR / "logs"
 
 for dir_path in [DATA_DIR, ARTIFACTS_DIR, MLRUNS_DIR, LOGS_DIR]:
     os.makedirs(dir_path, exist_ok=True)
