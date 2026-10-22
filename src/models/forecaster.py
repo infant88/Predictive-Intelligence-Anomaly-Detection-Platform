@@ -6,7 +6,11 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-import xgboost as xgb
+try:
+    import xgboost as xgb
+    HAS_XGBOOST = True
+except ImportError:
+    HAS_XGBOOST = False
 
 from src.config import ARTIFACTS_DIR
 from src.logger import logger
@@ -18,7 +22,11 @@ class DemandForecaster:
     """Predicts future business demand using modern Gradient Boosted Trees and Random Forests."""
 
     def __init__(self, model_type: str = "xgboost"):
-        self.model_type = model_type.lower()
+        if model_type.lower() == "xgboost" and not HAS_XGBOOST:
+            logger.info("XGBoost not installed; defaulting to RandomForestRegressor.")
+            self.model_type = "random_forest"
+        else:
+            self.model_type = model_type.lower()
         self.model = None
         self.residual_std: float = 1.0
         self.metrics: Dict[str, float] = {}
@@ -35,13 +43,21 @@ class DemandForecaster:
         """Trains the demand forecasting model and calculates evaluation metrics."""
         logger.info(f"Training {self.model_type.upper()} Demand Forecaster on {len(X_train)} samples...")
 
-        if self.model_type == "xgboost":
+        if self.model_type == "xgboost" and HAS_XGBOOST:
             self.model = xgb.XGBRegressor(
                 n_estimators=180,
                 max_depth=5,
                 learning_rate=0.06,
                 subsample=0.85,
                 colsample_bytree=0.85,
+                random_state=42,
+                n_jobs=-1
+            )
+        else:
+            self.model = RandomForestRegressor(
+                n_estimators=150,
+                max_depth=10,
+                min_samples_split=4,
                 random_state=42,
                 n_jobs=-1
             )
