@@ -3,6 +3,7 @@
 An enterprise-grade Machine Learning platform that **predicts future business demand**, **detects unusual patterns and anomalies** (sudden sales crashes and fraudulent transactions), and **explains the key factors driving predictions** using Explainable AI (SHAP).
 
 ---
+Project  live  link : https://predictive-intelligence-anomaly-detection-platform-iqle8567rer.streamlit.app/
 
 ## 🏗️ Tech Stack
 
