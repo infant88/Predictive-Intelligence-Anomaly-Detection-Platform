@@ -61,14 +61,6 @@ class DemandForecaster:
                 random_state=42,
                 n_jobs=-1
             )
-        else:
-            self.model = RandomForestRegressor(
-                n_estimators=150,
-                max_depth=10,
-                min_samples_split=4,
-                random_state=42,
-                n_jobs=-1
-            )
 
         self.model.fit(X_train, y_train)
         self.trained_at = datetime.utcnow()
