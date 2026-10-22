@@ -1,0 +1,26 @@
+# Python cache & byte-code
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Databases & logs
+*.db
+*.sqlite3
+logs/
+*.log
+
+# MLflow & model artifacts
+mlruns/
+artifacts/*.joblib
+
+# OS generated
+.DS_Store
+Thumbs.db
